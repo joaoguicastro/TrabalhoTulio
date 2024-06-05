@@ -21,7 +21,7 @@ public class App {
             String palavra = linha.trim().toLowerCase();
             palavrasChave.insereFinal(palavra);
             tabelaHash.insere(palavra, new ListaSimplesmenteEncadeada<>());
-            arvoreBinaria.insereDireita(palavra, null);
+            arvoreBinaria.insere(palavra);
         }
         reader.close();
     }

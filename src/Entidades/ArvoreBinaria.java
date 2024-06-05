@@ -1,9 +1,7 @@
 package Entidades;
 
-import java.util.LinkedList;
-import java.util.Queue;
-
 public class ArvoreBinaria<T extends Comparable<T>> {
+
     class Nodo {
         public T elemento;
         public Nodo esquerdo;
@@ -16,6 +14,53 @@ public class ArvoreBinaria<T extends Comparable<T>> {
         }
     }
 
+    class FilaDinamica {
+        class NodoFila {
+            public Nodo nodo;
+            public NodoFila proximo;
+
+            public NodoFila(Nodo nodo) {
+                this.nodo = nodo;
+                this.proximo = null;
+            }
+        }
+
+        private NodoFila primeiro;
+        private NodoFila ultimo;
+
+        public FilaDinamica() {
+            this.primeiro = null;
+            this.ultimo = null;
+        }
+
+        public boolean estaVazia() {
+            return this.primeiro == null;
+        }
+
+        public void enfileira(Nodo nodo) {
+            NodoFila novoNodoFila = new NodoFila(nodo);
+            if (this.ultimo != null) {
+                this.ultimo.proximo = novoNodoFila;
+            }
+            this.ultimo = novoNodoFila;
+            if (this.primeiro == null) {
+                this.primeiro = novoNodoFila;
+            }
+        }
+
+        public Nodo desenfileira() {
+            if (this.estaVazia()) {
+                return null;
+            }
+            Nodo nodo = this.primeiro.nodo;
+            this.primeiro = this.primeiro.proximo;
+            if (this.primeiro == null) {
+                this.ultimo = null;
+            }
+            return nodo;
+        }
+    }
+
     public Nodo raiz;
     public int nElementos;
 
@@ -24,8 +69,35 @@ public class ArvoreBinaria<T extends Comparable<T>> {
         this.nElementos = 0;
     }
 
+    public int tamanho() {
+        return this.nElementos;
+    }
+
     public boolean estaVazia() {
         return this.raiz == null;
+    }
+
+    public void imprimeEmLargura() {
+        if (this.estaVazia()) {
+            return;
+        }
+
+        FilaDinamica fila = new FilaDinamica();
+        fila.enfileira(this.raiz);
+
+        while (!fila.estaVazia()) {
+            Nodo atual = fila.desenfileira();
+            System.out.print(atual.elemento + " ");
+
+            if (atual.esquerdo != null) {
+                fila.enfileira(atual.esquerdo);
+            }
+
+            if (atual.direito != null) {
+                fila.enfileira(atual.direito);
+            }
+        }
+        System.out.println();
     }
 
     public void imprimePreOrdem() {
@@ -43,30 +115,7 @@ public class ArvoreBinaria<T extends Comparable<T>> {
         System.out.println();
     }
 
-    public void imprimeEmLargura() {
-        if (this.estaVazia()) {
-            return;
-        }
-
-        Queue<Nodo> fila = new LinkedList<>();
-        fila.add(this.raiz);
-
-        while (!fila.isEmpty()) {
-            Nodo atual = fila.poll();
-            System.out.print(atual.elemento + " ");
-
-            if (atual.esquerdo != null) {
-                fila.add(atual.esquerdo);
-            }
-
-            if (atual.direito != null) {
-                fila.add(atual.direito);
-            }
-        }
-        System.out.println();
-    }
-
-    public void preOrdem(Nodo nodo) {
+    private void preOrdem(Nodo nodo) {
         if (nodo == null)
             return;
 
@@ -75,7 +124,7 @@ public class ArvoreBinaria<T extends Comparable<T>> {
         this.preOrdem(nodo.direito);
     }
 
-    public void posOrdem(Nodo nodo) {
+    private void posOrdem(Nodo nodo) {
         if (nodo == null)
             return;
 
@@ -84,7 +133,7 @@ public class ArvoreBinaria<T extends Comparable<T>> {
         System.out.print(nodo.elemento + " ");
     }
 
-    public void emOrdem(Nodo nodo) {
+    private void emOrdem(Nodo nodo) {
         if (nodo == null)
             return;
 
@@ -93,99 +142,120 @@ public class ArvoreBinaria<T extends Comparable<T>> {
         this.emOrdem(nodo.direito);
     }
 
-    public Nodo busca(T elemento) {
-        return buscaRecursivo(this.raiz, elemento);
+    public void insere(T elemento) {
+        this.raiz = this.insere(elemento, this.raiz);
     }
 
-    private Nodo buscaRecursivo(Nodo nodo, T elemento) {
-        if (nodo == null || nodo.elemento.equals(elemento)) {
-            return nodo;
+    private Nodo insere(T elemento, Nodo nodo) {
+        if (nodo == null) {
+            this.nElementos++;
+            return new Nodo(elemento);
         }
 
         if (elemento.compareTo(nodo.elemento) < 0) {
-            return buscaRecursivo(nodo.esquerdo, elemento);
+            nodo.esquerdo = this.insere(elemento, nodo.esquerdo);
+        } else if (elemento.compareTo(nodo.elemento) > 0) {
+            nodo.direito = this.insere(elemento, nodo.direito);
+        }
+
+        return nodo;
+    }
+
+    private Nodo maiorElemento(Nodo nodo) {
+        while (nodo.direito != null) {
+            nodo = nodo.direito;
+        }
+        return nodo;
+    }
+
+    private Nodo menorElemento(Nodo nodo) {
+        while (nodo.esquerdo != null) {
+            nodo = nodo.esquerdo;
+        }
+        return nodo;
+    }
+
+    public boolean remove(T elemento) {
+        if (this.raiz == null) {
+            System.out.println("Valor não encontrado");
+            return false;
+        }
+
+        this.raiz = this.remove(elemento, this.raiz);
+        return true;
+    }
+
+    private Nodo remove(T elemento, Nodo nodo) {
+        if (nodo == null) {
+            System.out.println("Valor não encontrado");
+            return null;
+        }
+
+        if (elemento.compareTo(nodo.elemento) < 0) {
+            nodo.esquerdo = this.remove(elemento, nodo.esquerdo);
+        } else if (elemento.compareTo(nodo.elemento) > 0) {
+            nodo.direito = this.remove(elemento, nodo.direito);
         } else {
-            return buscaRecursivo(nodo.direito, elemento);
+            if (nodo.esquerdo == null) {
+                this.nElementos--;
+                return nodo.direito;
+            } else if (nodo.direito == null) {
+                this.nElementos--;
+                return nodo.esquerdo;
+            } else {
+                Nodo substituto = this.menorElemento(nodo.direito);
+                nodo.elemento = substituto.elemento;
+                nodo.direito = this.remove(substituto.elemento, nodo.direito);
+            }
+        }
+
+        return nodo;
+    }
+
+    public boolean busca(T elemento) {
+        return this.busca(elemento, this.raiz);
+    }
+
+    private boolean busca(T elemento, Nodo nodo) {
+        if (nodo == null) {
+            return false;
+        }
+
+        if (elemento.compareTo(nodo.elemento) < 0) {
+            return this.busca(elemento, nodo.esquerdo);
+        } else if (elemento.compareTo(nodo.elemento) > 0) {
+            return this.busca(elemento, nodo.direito);
+        } else {
+            return true;
         }
     }
 
-    public boolean insereEsquerda(T elemento, T pai) {
-        Nodo novo = new Nodo(elemento);
-
-        if (this.estaVazia()) {
-            this.raiz = novo;
-            this.nElementos++;
-            return true;
+    private int altura(Nodo nodo) {
+        if (nodo == null) {
+            return -1;
         }
 
-        Nodo nodoPai = this.busca(pai);
-        if (nodoPai != null) {
-            if (nodoPai.esquerdo == null) {
-                nodoPai.esquerdo = novo;
-                this.nElementos++;
-                return true;
-            } else {
-                System.out.println("Elemento ja tem filho esquerdo!");
-                return false;
-            }
-        } else {
-            System.out.println("Elemento nao existe na arvore!");
-            return false;
-        }
+        int alturaEsquerda = this.altura(nodo.esquerdo) + 1;
+        int alturaDireita = this.altura(nodo.direito) + 1;
+
+        return Math.max(alturaEsquerda, alturaDireita);
     }
 
-    public boolean insereDireita(T elemento, T pai) {
-        Nodo novo = new Nodo(elemento);
-
-        if (this.estaVazia()) {
-            this.raiz = novo;
-            this.nElementos++;
-            return true;
-        }
-
-        Nodo nodoPai = null;
-        if (pai != null) {
-            nodoPai = this.busca(pai);
-        }
-
-        if (nodoPai != null) {
-            if (nodoPai.direito == null) {
-                nodoPai.direito = novo;
-                this.nElementos++;
-                return true;
-            } else {
-                System.out.println("Elemento ja tem filho direito!");
-                return false;
-            }
-        } else if (pai == null) { // Inserção inicial na árvore
-            this.raiz = novo;
-            this.nElementos++;
-            return true;
-        } else {
-            System.out.println("Elemento nao existe na arvore!");
-            return false;
-        }
+    public int altura() {
+        return this.altura(this.raiz);
     }
 
     public static void main(String[] args) {
-        ArvoreBinaria<Integer> arvore = new ArvoreBinaria<>();
+        ArvoreBinaria<String> arvore = new ArvoreBinaria<>();
 
-        // raiz
-        arvore.insereDireita(5, null);
-
-        // nivel 1
-        arvore.insereEsquerda(3, 5);
-        arvore.insereDireita(8, 5);
-
-        // nivel 2
-        arvore.insereEsquerda(1, 3);
-        arvore.insereDireita(4, 3);
-        arvore.insereEsquerda(7, 8);
-        arvore.insereDireita(9, 8);
-
-        // nivel 3
-        arvore.insereDireita(2, 1);
-        arvore.insereEsquerda(6, 7);
+        // Inserindo elementos na árvore
+        arvore.insere("mango");
+        arvore.insere("banana");
+        arvore.insere("apple");
+        arvore.insere("peach");
+        arvore.insere("grape");
+        arvore.insere("cherry");
+        arvore.insere("pear");
 
         System.out.print("Em largura:\t");
         arvore.imprimeEmLargura();
@@ -195,5 +265,16 @@ public class ArvoreBinaria<T extends Comparable<T>> {
         arvore.imprimePosOrdem();
         System.out.print("Em ordem:\t");
         arvore.imprimeEmOrdem();
+
+        System.out.println("Altura da árvore: " + arvore.altura());
+
+        // Removendo um elemento da árvore
+        arvore.remove("banana");
+        System.out.print("Em largura após remover banana:\t");
+        arvore.imprimeEmLargura();
+
+        // Buscando elementos na árvore
+        System.out.println("Busca por apple: " + arvore.busca("apple"));
+        System.out.println("Busca por banana: " + arvore.busca("banana"));
     }
 }

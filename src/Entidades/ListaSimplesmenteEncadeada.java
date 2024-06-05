@@ -1,7 +1,5 @@
 package Entidades;
 
-import java.util.NoSuchElementException;
-
 public class ListaSimplesmenteEncadeada<T> {
     public class Nodo {
         public T valor;
@@ -37,7 +35,7 @@ public class ListaSimplesmenteEncadeada<T> {
 
     public void removeInicio() {
         if (primeiro == null) {
-            throw new NoSuchElementException("A lista esta vazia");
+            throw new ExcecaoElementoNaoEncontrado("A lista esta vazia");
         } else {
             primeiro = primeiro.proximo;
             tamanho--;
@@ -61,7 +59,7 @@ public class ListaSimplesmenteEncadeada<T> {
 
     public void removeFinal() {
         if (ultimo == null) {
-            throw new NoSuchElementException("A lista esta vazia");
+            throw new ExcecaoElementoNaoEncontrado("A lista esta vazia");
         } else {
             if (primeiro == ultimo) {
                 primeiro = null;
@@ -80,7 +78,7 @@ public class ListaSimplesmenteEncadeada<T> {
 
     public void inserePosicao(T valor, int posicao) {
         if (posicao < 0 || posicao > tamanho) {
-            throw new IndexOutOfBoundsException("Posicao invalida");
+            throw new ExcecaoPosicaoInvalida("Posicao invalida");
         }
 
         if (posicao == 0) {
@@ -101,7 +99,7 @@ public class ListaSimplesmenteEncadeada<T> {
 
     public void removePosicao(int posicao) {
         if (posicao < 0 || posicao >= tamanho) {
-            throw new IndexOutOfBoundsException("Posicao invalida");
+            throw new ExcecaoPosicaoInvalida("Posicao invalida");
         }
 
         if (posicao == 0) {
@@ -161,5 +159,17 @@ public class ListaSimplesmenteEncadeada<T> {
 
         lista.removeFinal();
         lista.imprimirLista(); // Saida: 2 10 4
+    }
+}
+
+class ExcecaoElementoNaoEncontrado extends RuntimeException {
+    public ExcecaoElementoNaoEncontrado(String mensagem) {
+        super(mensagem);
+    }
+}
+
+class ExcecaoPosicaoInvalida extends RuntimeException {
+    public ExcecaoPosicaoInvalida(String mensagem) {
+        super(mensagem);
     }
 }

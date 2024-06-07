@@ -66,7 +66,7 @@ public class App {
 
     public static void main(String[] args) {
         if (args.length != 3) {
-            System.out.println("Uso: java App <arquivo_palavras_chave> <arquivo_texto> <arquivo_saida>");
+            System.out.println("para rodar o codigo use java -cp bin App palavras-chave.txt texto.txt resultado.txt");
             return;
         }
 

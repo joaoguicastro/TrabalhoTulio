@@ -92,7 +92,6 @@ public class App {
             indice.lerPalavrasChave(args[0]);
             indice.processarTexto(args[1]);
             indice.gerarIndiceRemissivo(args[2]);
-            System.out.println("Índice remissivo gerado com sucesso!");
         } catch (Exception e) {
             System.err.println("Erro ao processar arquivos: " + e.getMessage());
         }

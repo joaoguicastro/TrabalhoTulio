@@ -277,7 +277,6 @@ public class ArvoreBinaria<T extends Comparable<T>> {
     public static void main(String[] args) {
         ArvoreBinaria<String> arvore = new ArvoreBinaria<>();
 
-        // Inserindo elementos na árvore
         arvore.insere("mango");
         arvore.insere("banana");
         arvore.insere("apple");
@@ -297,12 +296,10 @@ public class ArvoreBinaria<T extends Comparable<T>> {
 
         System.out.println("Altura da árvore: " + arvore.altura());
 
-        // Removendo um elemento da árvore
         arvore.remove("banana");
         System.out.print("Em largura após remover banana:\t");
         arvore.imprimeEmLargura();
-
-        // Buscando elementos na árvore
+        
         System.out.println("Busca por apple: " + arvore.busca("apple"));
         System.out.println("Busca por banana: " + arvore.busca("banana"));
     }

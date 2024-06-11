@@ -23,7 +23,7 @@ public class TabelaHashGenerico<T> {
 
     private int funcaoHashDiv(Object elemento) {
         int hashCode = elemento.hashCode();
-        int chave = Math.abs(hashCode) % this.vetor.length; // Garantir que o índice seja positivo
+        int chave = Math.abs(hashCode) % this.vetor.length;
         return chave;
     }
 

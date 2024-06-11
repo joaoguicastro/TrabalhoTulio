@@ -142,23 +142,23 @@ public class ListaSimplesmenteEncadeada<T> {
         lista.insereInicio(3);
         lista.insereInicio(2);
         lista.insereInicio(1);
-        lista.imprimirLista(); // Saida: 1 2 3
+        lista.imprimirLista();
 
         lista.insereFinal(4);
         lista.insereFinal(5);
-        lista.imprimirLista(); // Saida: 1 2 3 4 5
+        lista.imprimirLista();
 
         lista.inserePosicao(10, 2);
-        lista.imprimirLista(); // Saida: 1 2 10 3 4 5
+        lista.imprimirLista();
 
         lista.removePosicao(3);
-        lista.imprimirLista(); // Saida: 1 2 10 4 5
+        lista.imprimirLista();
 
         lista.removeInicio();
-        lista.imprimirLista(); // Saida: 2 10 4 5
+        lista.imprimirLista();
 
         lista.removeFinal();
-        lista.imprimirLista(); // Saida: 2 10 4
+        lista.imprimirLista();
     }
 }
 

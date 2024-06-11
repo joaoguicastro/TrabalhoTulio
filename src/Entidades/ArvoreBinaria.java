@@ -1,5 +1,8 @@
 package Entidades;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+
 public class ArvoreBinaria<T extends Comparable<T>> {
 
     class Nodo {
@@ -140,6 +143,32 @@ public class ArvoreBinaria<T extends Comparable<T>> {
         this.emOrdem(nodo.esquerdo);
         System.out.print(nodo.elemento + " ");
         this.emOrdem(nodo.direito);
+    }
+
+    public void imprimeEmOrdemComIndices(TabelaHashGenerico<ListaSimplesmenteEncadeada<Integer>> tabelaHash,
+            BufferedWriter writer) throws IOException {
+        imprimeEmOrdemComIndices(this.raiz, tabelaHash, writer);
+    }
+
+    private void imprimeEmOrdemComIndices(Nodo nodo, TabelaHashGenerico<ListaSimplesmenteEncadeada<Integer>> tabelaHash,
+            BufferedWriter writer) throws IOException {
+        if (nodo == null)
+            return;
+
+        imprimeEmOrdemComIndices(nodo.esquerdo, tabelaHash, writer);
+
+        writer.write(nodo.elemento + ": ");
+        ListaSimplesmenteEncadeada<Integer> lista = tabelaHash.busca(nodo.elemento);
+        if (lista != null) {
+            ListaSimplesmenteEncadeada<Integer>.Nodo temp = lista.primeiro;
+            while (temp != null) {
+                writer.write(temp.valor + " ");
+                temp = temp.proximo;
+            }
+        }
+        writer.newLine();
+
+        imprimeEmOrdemComIndices(nodo.direito, tabelaHash, writer);
     }
 
     public void insere(T elemento) {

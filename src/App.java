@@ -36,7 +36,7 @@ public class App {
                 if (palavrasChave.contem(palavra) || palavrasChave.contem(removerPlural(palavra))) {
                     String chave = palavrasChave.contem(palavra) ? palavra : removerPlural(palavra);
                     ListaSimplesmenteEncadeada<Integer> lista = tabelaHash.busca(chave);
-                    if (lista != null) {
+                    if (lista != null && !lista.contem(numeroLinha)) {
                         lista.insereFinal(numeroLinha);
                     }
                 }
@@ -83,7 +83,8 @@ public class App {
 
     public static void main(String[] args) {
         if (args.length != 3) {
-            System.out.println("Uso: java App <arquivo_palavras_chave> <arquivo_texto> <arquivo_saida>");
+            System.out.println(
+                    "Para rodar o codigo utilize o java -cp bin App src/palavras-chave src/texto.txt src/resultado.txt");
             return;
         }
 
@@ -92,7 +93,7 @@ public class App {
             indice.lerPalavrasChave(args[0]);
             indice.processarTexto(args[1]);
             indice.gerarIndiceRemissivo(args[2]);
-            System.out.println("Índice remissivo gerado com sucesso!");
+            System.out.println("Gerado");
         } catch (Exception e) {
             System.err.println("Erro ao processar arquivos: " + e.getMessage());
         }
